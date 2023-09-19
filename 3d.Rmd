@@ -1,0 +1,80 @@
+---
+title: "rad"
+author: "3d"
+date: "2023-09-08"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(rgl)
+library(plotly)
+library(plot3D)
+library(plot3Drgl)
+library(rayshader)
+```
+
+
+
+
+```{r}
+r <- read.csv("test1.csv") %>%
+  dplyr::select(New.IDs,Category,Ra.226..Bq.kg.,X....._1,Th.232..Bq.kg.,X....._2, K.40..Bq.kg.,X....._3,Cs.137..Bq.kg.,X....._4,Ra.eq...Bq.kg.,D..nGy.h.,AED..mSv.y.,Latitude, Longitude) %>%
+  rename("IDS"= "New.IDs","Category"="Category", "Ra-226 (Bq/kg)"= "Ra.226..Bq.kg.","+/- ra"="X....._1","Th-232 (Bq/kg)"="Th.232..Bq.kg.", "+/- th"="X....._2","K-40 (Bq/kg)"="K.40..Bq.kg.","+/- k"="X....._3", "Cs-137 (Bq/kg)"="Cs.137..Bq.kg.","+/- cs"=X....._4,"Ra(eq) (Bq/kg)"="Ra.eq...Bq.kg.","D (nGy/h)"="D..nGy.h." ,"AED (mSv/y)"="AED..mSv.y.","Latitude"="Latitude", "Longitude"= "Longitude")
+```
+
+
+
+```{r}
+# Plot the histogram for this sample.
+`Ra-226 (Bq/kg)` <- r$`Ra-226 (Bq/kg)`
+hist(`Ra-226 (Bq/kg)`, main = "Normal DIstribution")
+```
+
+
+
+```{r}
+`Th-232 (Bq/kg)` <- r$`Th-232 (Bq/kg)`
+hist(`Th-232 (Bq/kg)`, main = "Normal DIstribution")
+```
+
+
+
+```{r}
+`K-40 (Bq/kg)` <- r$`K-40 (Bq/kg)`
+hist(`K-40 (Bq/kg)`, main = "Normal DIstribution")
+```
+
+
+
+```{r}
+
+`Cs-137 (Bq/kg)` <- r$`Cs-137 (Bq/kg)`
+hist(`Cs-137 (Bq/kg)`, main = "Normal DIstribution")
+```
+
+
+```{r}
+r = ggplot(r) + 
+  geom_point(aes(x=Longitude,color=`Cs-137 (Bq/kg)`,y=Latitude),size=2) +
+  scale_color_continuous(limits=c(0,15)) +
+  ggtitle("r: conc") +
+  theme(title = element_text(size=8),
+        text = element_text(size=12)) 
+
+plot_gg(r, height=3, width=3.5, multicore=TRUE, pointcontract = 0.7, soliddepth=5)
+
+r
+
+render_snapshot()
+
+```
+
+
+
+
+
+
